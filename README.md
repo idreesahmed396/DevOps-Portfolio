@@ -2,7 +2,7 @@
 
 | **Licence**  | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)  |
 |---|---|
-| **Deploy status**  |  [![Netlify Status](https://api.netlify.com/api/v1/badges/d0268492-3c13-4c56-aa3d-6c40adadfd0f/deploy-status)](https://app.netlify.com/sites/adityagundecha/deploys) |
+| **Deploy status**  |  [![Netlify Status](https://api.netlify.com/api/v1/badges/d0268492-3c13-4c56-aa3d-6c40adadfd0f/deploy-status)](https://app.netlify.com/sites/idreescloud/deploys) |
 
 
 A website to showcase DevOps professional portfolio
@@ -32,7 +32,7 @@ Deployment is done via [Netlify](https://www.netlify.com/).
 
 ## Authors
 
-* **Aditya Gundecha** - *Initial work* 
+* **Idrees Ahmed** - *Initial work* 
 
 ## License
 
