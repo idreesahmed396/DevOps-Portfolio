@@ -1,0 +1,57 @@
+name: CI/CD Portfolio
+
+on:
+  push:
+    branches: [main]         # Trigger on push to main
+  pull_request:
+    branches: [main]         # Trigger on PR
+  workflow_dispatch:         # Manual trigger
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t idreesahmed396/devops-portfolio:latest .
+
+      # 4. Push Docker image
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push idreesahmed396/devops-portfolio:latest
+
+      # 5. Install kubectl
+      - name: Install kubectl
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y kubectl
+
+      # 6. Configure kubeconfig (from GitHub Secrets)
+      - name: Set kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.K3S_KUBECONFIG }}" > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      # 7. Restart K3s deployment to pull new Docker image
+      - name: Restart portfolio deployment in K3s
+        run: |
+          kubectl rollout restart deployment portfolio -n default
+
+      # 8. Wait until rollout finished
+      - name: Verify rollout status
+        run: |
+          kubectl rollout status deployment portfolio -n default
