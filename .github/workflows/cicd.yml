@@ -30,12 +30,12 @@ jobs:
       # 4. Build Docker image
       - name: Build Docker image
         run: |
-          docker build --no-cache -t idreesahmed396/devops-portfolio:latest .
+          docker build -t idreesahmed396/devops-portfolio:${GITHUB_SHA} .
           
       # 5. Push Docker image
       - name: Push Docker image
         run: |
-          docker push idreesahmed396/devops-portfolio:latest
+          docker push idreesahmed396/devops-portfolio:${GITHUB_SHA}
 
       # 5a. Set up kubeconfig safely
       - name: Set kubeconfig
@@ -44,8 +44,8 @@ jobs:
            echo "${{ secrets.K3S_KUBECONFIG }}" > ~/.kube/config
 
       # 6. Restart deployment
-      - name: Restart portfolio deployment
+      - name: Update K3s deployment
         run: |
           kubectl --kubeconfig ~/.kube/config -n default set image deployment/portfolio \
-            portfolio=idreesahmed396/devops-portfolio:latest --record
-          kubectl --kubeconfig ~/.kube/config -n default rollout status deployment portfolio --timeout=120s
+          portfolio=idreesahmed396/devops-portfolio:${GITHUB_SHA} --record
+          kubectl --kubeconfig ~/.kube/config -n default rollout status deployment/portfolio --timeout=120s
